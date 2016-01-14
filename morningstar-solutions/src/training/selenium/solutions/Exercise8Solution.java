@@ -48,11 +48,20 @@ private static final String TEST_URL = "http://directbeta.morningstar.com/";
 
 	@Override
 	public void onTestFailure(ITestResult tr) {
+		/*
+		 * At runtime, TestNG will create 2 instances of this class: one to run the 
+		 * test, and another to run this method. So even though we are implementing 
+		 * this method in the same class as the test code (above), we must retrieve 
+		 * the instance on which the test is run. Of course, it is implemented this
+		 * way for the sake of example, and in a real framework this method would
+		 * never reside in the same class as test code.
+		 */
 		Exercise8Solution instance = (Exercise8Solution) tr.getInstance();
 		WebDriver wd = instance.driver;
 		if (wd != null) {
 			File screenshot = ((TakesScreenshot)wd).getScreenshotAs(OutputType.FILE);
-			String targetFilename = System.getProperty("user.dir") + "/target/screenshot" + new Date().getTime() + ".png";
+			String targetFilename = System.getProperty("user.dir") + "/target/screenshot" 
+					+ new Date().getTime() + ".png";
 			try {
 				FileUtils.copyFile(screenshot, new File(targetFilename));
 			} catch (IOException e) {
